@@ -29,7 +29,7 @@ func (h *SearchLoginHandler) Handle(qry SearchLoginQuery) (LoginList, error) {
 	list := profile.GetLogins().Filter(func(l *model.Login) bool {
 		return l.Domain == qry.Domain
 	})
-	
+
 	filteredList := make(LoginList, 0)
 	for _, l := range list {
 		filteredList = append(filteredList, struct {

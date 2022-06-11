@@ -80,7 +80,7 @@ func TestAddLoginToProfileWithOneLogin(t *testing.T) {
 		{"username": "just@domain.com", "domain": "foo-domain.com", "password": "123"},
 	})
 	repo := tests.NewMockProfileRepository(mockProfile)
-	
+
 	handler := &AddLoginHandler{repo}
 	cmd := AddLoginCommand{profileUsername, loginUsername, domain, "123"}
 

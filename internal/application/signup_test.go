@@ -8,14 +8,14 @@ import (
 	"github.com/MAZEN-Kenjrawi/pwd/internal/tests"
 )
 
-func TestCreateNewProfileForExistingUsername(t *testing.T) {
+func TestSignUpNewProfileForExistingUsername(t *testing.T) {
 	// Arrange
 	t.Parallel()
 	p := tests.NewMockProfile("Mazen", "foo", []map[string]string{})
 	repo := tests.NewMockProfileRepository(p)
 
-	cmd := CreateProfileCommand{"Mazen", "foo"}
-	handler := &CreateProfileHandler{repo}
+	cmd := SignUpCommand{"Mazen", "foo"}
+	handler := &SignUpHandler{repo}
 
 	// Act
 	err := handler.Handle(cmd)
@@ -26,14 +26,14 @@ func TestCreateNewProfileForExistingUsername(t *testing.T) {
 	}
 }
 
-func TestCreateNewProfileWithNoErrors(t *testing.T) {
+func TestSignUpNewProfileWithNoErrors(t *testing.T) {
 	// Arrange
 	t.Parallel()
 	username := "Mazen"
 	repo := tests.NewMockProfileRepository()
-	
-	handler := &CreateProfileHandler{repo}
-	cmd := CreateProfileCommand{username, "foo"}
+
+	handler := &SignUpHandler{repo}
+	cmd := SignUpCommand{username, "foo"}
 
 	// Act
 	err := handler.Handle(cmd)

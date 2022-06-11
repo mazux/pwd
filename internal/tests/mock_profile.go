@@ -51,6 +51,6 @@ func NewMockProfileRepository(profiles ...model.Profile) *ProfileRepository {
 	for _, p := range profiles {
 		r.Profiles[p.Username] = p
 	}
-	
+
 	return r
 }

@@ -4,18 +4,16 @@ import (
 	"github.com/MAZEN-Kenjrawi/pwd/internal/model"
 )
 
-var ()
-
-type CreateProfileCommand struct {
+type SignUpCommand struct {
 	Username string
 	Secret   string
 }
 
-type CreateProfileHandler struct {
+type SignUpHandler struct {
 	ProfileRepo model.ProfileRepository
 }
 
-func (h *CreateProfileHandler) Handle(cmd CreateProfileCommand) error {
+func (h *SignUpHandler) Handle(cmd SignUpCommand) error {
 	existingProfile, err := h.ProfileRepo.GetProfileByUsername(cmd.Username)
 	if err != nil {
 		return err
