@@ -13,7 +13,7 @@ func TestGetLoginFromNonExisitingProfile(t *testing.T) {
 	t.Parallel()
 	repo := tests.NewMockProfileRepository()
 	handler := &GetLoginHandler{repo}
-	qry := GetLoginQuery{"Mazen", "foo.com"}
+	qry := GetLoginQuery{"Mazen", "foo.com", "MAZux"}
 
 	// Act
 	login, err := handler.Handle(qry)
@@ -39,7 +39,7 @@ func TestGetLoginFroProfileWithNoMatch(t *testing.T) {
 	repo := tests.NewMockProfileRepository(mockProfile)
 
 	handler := &GetLoginHandler{repo}
-	qry := GetLoginQuery{profileUsername, "foo.com"}
+	qry := GetLoginQuery{profileUsername, "foo.com", "MAZux"}
 
 	// Act
 	login, err := handler.Handle(qry)
@@ -59,13 +59,16 @@ func TestGetLoginFroProfileWithMatch(t *testing.T) {
 	t.Parallel()
 	profileUsername := "Mazen"
 	loginDomain := "github.com"
+	loginUsername := "MAZux"
 	mockProfile := tests.NewMockProfile(profileUsername, "foo", []map[string]string{
-		{"username": "MAZux", "domain": loginDomain, "password": "123"},
+		{"username": "first user", "domain": loginDomain, "password": "432"},
+		{"username": loginUsername, "domain": loginDomain, "password": "123"},
+		{"username": "Just user", "domain": loginDomain, "password": "334"},
 	})
 	repo := tests.NewMockProfileRepository(mockProfile)
 
 	handler := &GetLoginHandler{repo}
-	qry := GetLoginQuery{profileUsername, loginDomain}
+	qry := GetLoginQuery{profileUsername, loginDomain, loginUsername}
 
 	// Act
 	login, err := handler.Handle(qry)

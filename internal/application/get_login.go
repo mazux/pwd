@@ -11,6 +11,7 @@ type Login struct {
 type GetLoginQuery struct {
 	ProfileUsername string
 	Domain          string
+	Username        string
 }
 
 type GetLoginHandler struct {
@@ -27,7 +28,7 @@ func (h *GetLoginHandler) Handle(qry GetLoginQuery) (*Login, error) {
 	}
 
 	login := profile.GetLogins().Filter(func(l *model.Login) bool {
-		return l.Domain == qry.Domain
+		return l.Domain == qry.Domain && l.Username == qry.Username
 	}).First()
 
 	if login == nil {
