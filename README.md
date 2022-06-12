@@ -5,12 +5,12 @@ A simple passaword manager in golang.
 ## Domain model
 
 Each profile has:
-    - Username
-    - Secret (hashed value)
-    - list of creentials (i.e logins):
-        - Domain
-        - Username
-        - Password (encrypted password with a salt generated from both domain and username values)
+- Username
+- Secret (hashed value)
+- list of creentials (i.e logins):
+  - Domain
+  - Username
+  - Password (encrypted password with a salt generated from both domain and username values)
 
 ## Application (use cases)
 
