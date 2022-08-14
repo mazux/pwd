@@ -15,11 +15,11 @@ type CmdBus struct {
 func (b *CmdBus) Handle(c interface{}) error {
 	cmdType := getType(c)
 	switch cmdType {
-	case "application.AddLoginCommand":
+	case "AddLoginCommand":
 		return b.addLoginHandler.Handle(c.(application.AddLoginCommand))
-	case "application.RemoveLoginCommand":
+	case "RemoveLoginCommand":
 		return b.removeLoginHandler.Handle(c.(application.RemoveLoginCommand))
-	case "application.SignUpCommand":
+	case "SignUpCommand":
 		return b.signUpHandler.Handle(c.(application.SignUpCommand))
 	}
 

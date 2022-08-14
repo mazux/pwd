@@ -10,11 +10,11 @@ type SignUpCommand struct {
 }
 
 type SignUpHandler struct {
-	ProfileRepo model.ProfileRepository
+	ProfileRepository model.ProfileRepository
 }
 
 func (h *SignUpHandler) Handle(cmd SignUpCommand) error {
-	existingProfile, err := h.ProfileRepo.GetProfileByUsername(cmd.Username)
+	existingProfile, err := h.ProfileRepository.GetProfileByUsername(cmd.Username)
 	if err != nil {
 		return err
 	}
@@ -28,5 +28,5 @@ func (h *SignUpHandler) Handle(cmd SignUpCommand) error {
 		return err
 	}
 
-	return h.ProfileRepo.Save(profile)
+	return h.ProfileRepository.Save(profile)
 }

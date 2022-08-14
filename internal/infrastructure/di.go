@@ -12,11 +12,17 @@ import (
 
 const FILE_SYSTEM_STORAGE_MODE = "filesystem"
 
-func NewContainer(cfg Config) (*dig.Container, error) {
+type Container struct {
+	*dig.Container
+}
+
+func NewContainer(cfg Config) (*Container, error) {
 	c := dig.New()
 	switch cfg.Storage.Mode {
 	case FILE_SYSTEM_STORAGE_MODE:
-		if err := c.Provide(provideProfileRepository(cfg.Storage.Url)); err != nil {
+		if err := c.Provide(func() model.ProfileRepository {
+			return json.NewProfileRepository(cfg.Storage.Url)
+		}); err != nil {
 			return nil, err
 		}
 	default:
@@ -31,7 +37,7 @@ func NewContainer(cfg Config) (*dig.Container, error) {
 		return nil, err
 	}
 
-	return c, nil
+	return &Container{c}, nil
 }
 
 func provideProfileRepository(filePath string) model.ProfileRepository {
@@ -40,16 +46,16 @@ func provideProfileRepository(filePath string) model.ProfileRepository {
 
 func provideCmdBus(profileRepo model.ProfileRepository) CmdBus {
 	return CmdBus{
-		application.AddLoginHandler{profileRepo},
-		application.RemoveLoginHandler{profileRepo},
-		application.SignUpHandler{profileRepo},
+		application.AddLoginHandler{ProfileRepository: profileRepo},
+		application.RemoveLoginHandler{ProfileRepository: profileRepo},
+		application.SignUpHandler{ProfileRepository: profileRepo},
 	}
 }
 
 func provideQueryBus(profileRepo model.ProfileRepository) QueryBus {
 	return QueryBus{
-		application.GetLoginHandler{profileRepo},
-		application.SearchLoginHandler{profileRepo},
+		application.GetLoginHandler{ProfileRepository: profileRepo},
+		application.SearchLoginHandler{ProfileRepository: profileRepo},
 	}
 }
 

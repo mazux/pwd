@@ -1,4 +1,4 @@
-FROM golang:1.18-alpine AS builder
+FROM golang:1.19-alpine AS builder
 
 RUN apk add --no-cache git
 
@@ -17,14 +17,14 @@ COPY . .
 # RUN CGO_ENABLED=0 go test -v
 
 # Build the Go app
-RUN go build -o ./binary ./...
+RUN go build -o ./pwd ./cmd/cli
 
 # Start fresh from a smaller image
 FROM alpine:3.9 
 RUN apk add ca-certificates
 WORKDIR /tmp
 
-COPY --from=builder /tmp/app/binary ./binary
+COPY --from=builder /tmp/app/pwd ./pwd
 
 # Run the binary program produced by `go install`
-CMD ["/binary"]
+CMD ["/pwd"]

@@ -3,9 +3,9 @@ package model
 import "fmt"
 
 type Login struct {
-	Username string
-	Domain   string
-	password password
+	Username string   `json:"username"`
+	Domain   string   `json:"domain"`
+	Password password `json:"password"`
 }
 
 type loginList []*Login
@@ -29,7 +29,7 @@ func (ll loginList) First() *Login {
 }
 
 func (l Login) DecryptPassword() (string, error) {
-	return l.password.decrypt(l.getKey())
+	return l.Password.decrypt(l.getKey())
 }
 
 func (l *Login) encryptPassword(password string) error {
@@ -38,7 +38,7 @@ func (l *Login) encryptPassword(password string) error {
 		return err
 	}
 
-	l.password = encryptedPassword
+	l.Password = encryptedPassword
 	return nil
 }
 
