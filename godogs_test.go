@@ -1,18 +1,24 @@
 package main
 
 import (
-	"context"
 	"log"
 	"os"
 	"path/filepath"
+	"testing"
 
 	"github.com/MAZEN-Kenjrawi/pwd/internal/infrastructure"
-	"github.com/MAZEN-Kenjrawi/pwd/internal/tests/testcontext"
+	"github.com/MAZEN-Kenjrawi/pwd/internal/presentation"
+	"github.com/MAZEN-Kenjrawi/pwd/internal/tests/feature"
 	"github.com/cucumber/godog"
+	"github.com/cucumber/godog/colors"
 )
 
 var (
-	profileContext *testcontext.Profile
+	profileFeature *feature.ProfileFeature
+	opts           = godog.Options{
+		Output: colors.Colored(os.Stdout),
+		Format: "emoji",
+	}
 )
 
 func init() {
@@ -31,25 +37,26 @@ func init() {
 	}
 
 	c.Invoke(func(bus infrastructure.CmdBus) {
-		profileContext = testcontext.NewProfile(bus, cfg.Storage.Url)
+		cli := presentation.NewCli(bus)
+		profileFeature = feature.NewProfile(cli, cfg.Storage.Url)
 	})
 }
 
+func TestFeatures(t *testing.T) {
+	suite := godog.TestSuite{
+		ScenarioInitializer: InitializeScenario,
+		Options: &godog.Options{
+			Format:   "pretty",
+			Paths:    []string{"features"},
+			TestingT: t, // Testing instance that will run subtests.
+		},
+	}
+
+	if suite.Run() != 0 {
+		t.Fatal("non-zero status returned, failed to run feature tests")
+	}
+}
+
 func InitializeScenario(ctx *godog.ScenarioContext) {
-	ctx.Before(func(ctx context.Context, sc *godog.Scenario) (context.Context, error) {
-		profileContext.ClearStorage()
-		return ctx, nil
-	})
-
-	ctx.After(func(ctx context.Context, sc *godog.Scenario, err error) (context.Context, error) {
-		profileContext.ClearStorage()
-		return ctx, err
-	})
-
-	ctx.Step(`^I have a profile for username "([^"]*)"$`, profileContext.IHaveAProfileForUsername)
-	ctx.Step(`^I signup using username "([^"]*)"$`, profileContext.ISignupUsingUsername)
-	ctx.Step(`^I will get this error "([^"]*)"$`, profileContext.IWillGetThisError)
-
-	ctx.Step(`^I have no profiles stored$`, profileContext.IHaveNoProfilesStored)
-	ctx.Step(`^I will have a stored profile with username "([^"]*)" and empty list of logins$`, profileContext.IWillHaveAStoredProfileWithUsernameAndEmptyListOfLogins)
+	profileFeature.InitializeScenario(ctx)
 }

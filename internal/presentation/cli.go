@@ -6,7 +6,7 @@ import (
 )
 
 type Cli struct {
-	CmdBus infrastructure.CmdBus
+	cmdBus infrastructure.CmdBus
 }
 
 func (cli *Cli) Signup(username, secret string) error {
@@ -14,7 +14,27 @@ func (cli *Cli) Signup(username, secret string) error {
 		Username: username,
 		Secret:   secret,
 	}
-	err := cli.CmdBus.Handle(cmd)
+	err := cli.cmdBus.Handle(cmd)
+	if err != nil {
+		return err
+	}
+	cmd2 := application.AddLoginCommand{
+		ProfileUsername: username,
+		Username: "Mazen7",
+		Domain: "stackoverflow.com",
+		Password: "123",
+	}
+	return cli.cmdBus.Handle(cmd2)
+}
+
+func (cli *Cli) AddLogin(profileUsername, username, domain, password string) error {
+	cmd := application.AddLoginCommand{
+		ProfileUsername: profileUsername,
+		Username:        username,
+		Domain:          domain,
+		Password:        password,
+	}
+	err := cli.cmdBus.Handle(cmd)
 	if err != nil {
 		return err
 	}

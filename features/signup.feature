@@ -4,6 +4,9 @@ Feature: Signup with a new profile
         - Error path: Profile already exist
         - Happy path: Profile got created with no problems
     
+    Background: Clear the storage
+        Given I have empty storage
+    
     Scenario: Profile already exist
         Given I have a profile for username "MAZux"
         When I signup using username "MAZux"

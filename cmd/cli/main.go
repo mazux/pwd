@@ -26,8 +26,8 @@ func main() {
 
 	err = c.Invoke(func(bus infrastructure.CmdBus) error {
 		cli := presentation.NewCli(bus)
-		username := stringPrompt("Profile username: ")
-		secret := passwordPrompt("Your passowrd: ")
+		username := "MAZux" // stringPrompt("Profile username: ")
+		secret := "123"     // passwordPrompt("Your passowrd: ")
 		return cli.Signup(username, secret)
 	})
 

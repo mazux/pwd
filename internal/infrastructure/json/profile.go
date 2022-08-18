@@ -20,8 +20,8 @@ func (r *ProfileRepository) Save(p *model.Profile) error {
 		return err
 	}
 
-	filename := fmt.Sprintf("%s.json", p.Username)
-	return os.WriteFile(filepath.Join(r.filePath, filename), j, 0644)
+	path := filepath.Join(r.filePath, fmt.Sprintf("%s.json", p.Username))
+	return os.WriteFile(path, j, 0644)
 }
 
 func (r *ProfileRepository) GetProfileByUsername(username string) (*model.Profile, error) {

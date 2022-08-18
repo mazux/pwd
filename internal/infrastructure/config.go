@@ -7,7 +7,7 @@ import (
 )
 
 type Config struct {
-	Env string `env:"ENV" envDefault:"dev"`
+	Env string `env:"ENV" envDefault:"test"`
 
 	Storage struct {
 		Mode string `env:"STORAGE_MODE" envDefault:"filesystem"`
