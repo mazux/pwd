@@ -13,11 +13,11 @@ type SearchLoginQuery struct {
 }
 
 type SearchLoginHandler struct {
-	ProfileRepo model.ProfileRepository
+	ProfileRepository model.ProfileRepository
 }
 
 func (h *SearchLoginHandler) Handle(qry SearchLoginQuery) (LoginList, error) {
-	profile, err := h.ProfileRepo.GetProfileByUsername(qry.ProfileUsername)
+	profile, err := h.ProfileRepository.GetProfileByUsername(qry.ProfileUsername)
 	if err != nil {
 		return nil, err
 	}

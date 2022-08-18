@@ -19,18 +19,23 @@ help: ; $(info Usage:)
 	echo "\033[0;32mmake docker-test\033[0;0m        Run tests through docker"
 	echo ""
 
-.PHONY: run
-run: ;
-	go run ./...
-
 .PHONY: build
 build: ; $(info building app...)
-	go build -o ./app ./...
+	go build -o ./pwd ./cmd/cli
 	echo "Built successfully!"
+
+.PHONY: run
+run: ;
+	go run ./cmd/cli
 
 .PHONY: test
 test: ; $(info running tests...)
 	go test ./...
+
+.PHONY: godog
+godog: ; $(info running tests...)
+	cp -f .env.test .env
+	godog run
 
 .PHONY: config
 config: ; $(info Preparing configuration...)
@@ -39,13 +44,14 @@ config: ; $(info Preparing configuration...)
 
 .PHONY: docker-build
 docker-build: ; $(info building app through docker...)
+	docker build -f Dockerfile --target builder -t pwd-builder .
 	docker build -f Dockerfile -t pwd .
 	echo "Built successfully!"
 
 .PHONY: docker-run
 docker-run: ;
-	docker run -it pwd ./binary
+	docker run -it pwd ./pwd
 
 .PHONY: docker-test
 docker-test: ; $(info running tests through docker...)
-	echo "it's on my @todo list =D"
+	docker run --rm pwd-builder godog run

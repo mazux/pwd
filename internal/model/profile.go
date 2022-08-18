@@ -15,9 +15,9 @@ type ProfileRepository interface {
 }
 
 type Profile struct {
-	Username string
-	secret   hash
-	logins   loginList
+	Username string    `json:"username"`
+	Secret   hash      `json:"secret"`
+	Logins   loginList `json:"logins"`
 }
 
 func (p *Profile) AddLogin(username, domain, password string) error {
@@ -30,7 +30,7 @@ func (p *Profile) AddLogin(username, domain, password string) error {
 		return err
 	}
 
-	p.logins = append(p.logins, newLogin)
+	p.Logins = append(p.Logins, newLogin)
 
 	return nil
 }
@@ -41,7 +41,7 @@ func (p *Profile) RemoveLogin(username, domain string) error {
 		return ErrorLoginDoesNotExistInProfile
 	}
 
-	p.logins = append(p.logins[:k], p.logins[k+1:]...)
+	p.Logins = append(p.Logins[:k], p.Logins[k+1:]...)
 
 	return nil
 }
@@ -51,11 +51,11 @@ func (p *Profile) HasLogin(username, domain string) bool {
 }
 
 func (p *Profile) GetLogins() loginList {
-	return p.logins
+	return p.Logins
 }
 
 func (p *Profile) findLogin(username, domain string) int {
-	for k, l := range p.logins {
+	for k, l := range p.Logins {
 		if l.Username == username && l.Domain == domain {
 			return k
 		}

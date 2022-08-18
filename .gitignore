@@ -2,3 +2,4 @@
 /vendor
 .vscode
 .idea
+storage/test/*
